@@ -100,6 +100,19 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-6 sm:hidden">
+        <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-full ml-4">
+          <input
+            onChange={(e) => setSearchQuery(e.target.value)}
+            type="text"
+            placeholder="Search products"
+            className="w-full pl-3 pr-8 py-1.5 text-sm border border-gray-300 rounded-full placeholder-gray-500 outline-none"
+          />
+          <img
+            src={assets.search_icon}
+            alt="search"
+            className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+          />
+        </div>
         <div
           onClick={() => navigate("/cart")}
           className="relative cursor-pointer"
@@ -136,14 +149,15 @@ const Navbar = () => {
           <NavLink to="/products" onClick={() => setOpen(false)}>
             All Product
           </NavLink>
+          <NavLink to="/" onClick={() => setOpen(false)}>
+            Contact
+          </NavLink>
           {user && (
             <NavLink to="/my-orders" onClick={() => setOpen(false)}>
               My Orders
             </NavLink>
           )}
-          <NavLink to="/" onClick={() => setOpen(false)}>
-            Contact
-          </NavLink>
+
           {!user ? (
             <button
               onClick={() => {
