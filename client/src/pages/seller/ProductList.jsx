@@ -26,7 +26,7 @@ const ProductList = () => {
               <tr>
                 <th className="px-4 py-3 font-semibold truncate">Product</th>
                 <th className="px-4 py-3 font-semibold truncate">Category</th>
-                <th className="px-4 py-3 font-semibold truncate hidden md:block">
+                <th className="px-4 py-3 font-semibold truncate hidden sm:block">
                   Selling Price
                 </th>
                 <th className="px-4 py-3 font-semibold truncate">In Stock</th>
