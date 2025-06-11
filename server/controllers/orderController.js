@@ -1,6 +1,6 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
-import Stripe from "stripe";
+import stripePackage from "stripe";
 import User from "../models/User.js";
 //Placed Order COD :/api/order/cod
 export const placeOrderCOD = async (req, res) => {
@@ -37,7 +37,7 @@ export const placeOrderStripe = async (req, res) => {
     const userId = req.userId;
     const { origin } = req.headers;
     if (!address || items.length === 0) {
-      return res.json({ success: false, message: "Invali data" });
+      return res.json({ success: false, message: "Invalid data" });
     }
     let productData = [];
     //calculate amount using item
@@ -61,7 +61,7 @@ export const placeOrderStripe = async (req, res) => {
       paymentType: "Online",
     });
     //Stripe gateway initialize
-    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripeInstance = new stripePackage(process.env.STRIPE_SECRET_KEY);
 
     //create line item for stripe
     const line_items = productData.map((item) => {
@@ -97,7 +97,7 @@ export const placeOrderStripe = async (req, res) => {
 //stripe webhook to verify payment /stripe
 export const stripeWebhooks = async (request, response) => {
   //stripe gateway initializer
-  const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripeInstance = new stripePackage(process.env.STRIPE_SECRET_KEY);
 
   const sig = request.headers["stripe-signature"];
   let event;
@@ -108,17 +108,17 @@ export const stripeWebhooks = async (request, response) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (error) {
-    response.status(400).send(`Webhook Error:${error.message}`);
+    return response.status(400).send(`Webhook Error:${error.message}`);
   }
   //Handle the event
   switch (event.type) {
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object;
-      const paymentIntetId = paymentIntent.id;
+      const payment_intetId = paymentIntent.id;
 
       //getting session metadata
       const session = await stripeInstance.checkout.sessions.list({
-        payment_intent: paymentIntetId,
+        payment_intent: payment_intetId,
       });
       const { orderId, userId } = session.data[0].metadata;
       //mark payment as paid
@@ -129,11 +129,11 @@ export const stripeWebhooks = async (request, response) => {
     }
     case "payment_intent.payment_failed": {
       const paymentIntent = event.data.object;
-      const paymentIntetId = paymentIntent.id;
+      const payment_intetId = paymentIntent.id;
 
       //getting session metadata
       const session = await stripeInstance.checkout.sessions.list({
-        payment_intent: paymentIntetId,
+        payment_intent: payment_intetId,
       });
       const { orderId } = session.data[0].metadata;
       await Order.findByIdAndDelete(orderId);
