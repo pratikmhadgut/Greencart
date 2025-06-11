@@ -146,6 +146,9 @@ const Navbar = () => {
           <NavLink to="/" onClick={() => setOpen(false)}>
             Home
           </NavLink>
+          <NavLink to="/category" onClick={() => setOpen(false)}>
+            Categories
+          </NavLink>
           <NavLink to="/products" onClick={() => setOpen(false)}>
             All Product
           </NavLink>
