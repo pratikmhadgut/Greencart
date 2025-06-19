@@ -45,7 +45,13 @@ const Login = () => {
           <div className="w-full">
             <p>Name</p>
             <input
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                // Allow only letters and spaces
+                if (/^[A-Za-z\s]*$/.test(value)) {
+                  setName(value);
+                }
+              }}
               value={name}
               placeholder="type here"
               className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500"
@@ -57,7 +63,12 @@ const Login = () => {
         <div className="w-full ">
           <p>Email</p>
           <input
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (!value.includes(" ")) {
+                setEmail(value);
+              }
+            }}
             value={email}
             placeholder="type here"
             className="border border-gray-200 rounded w-full p-2 mt-1 outline-primary"
