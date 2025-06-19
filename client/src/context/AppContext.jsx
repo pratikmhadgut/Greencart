@@ -128,6 +128,10 @@ export const AppContextProvider = ({ children }) => {
       updateCart();
     }
   }, [cartItems]);
+  //clear cart items
+  const clearCart = () => {
+    setCartItems({});
+  };
   const value = {
     navigate,
     user,
@@ -149,6 +153,7 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
     setCartItems,
+    clearCart,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

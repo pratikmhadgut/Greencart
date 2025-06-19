@@ -17,7 +17,7 @@ const Login = () => {
         password,
       });
       if (data.success) {
-        navigate("/");
+        navigate("/cart");
         setUser(data.user);
         setShowUserLogin(false);
       } else {

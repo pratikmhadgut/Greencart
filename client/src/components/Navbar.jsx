@@ -15,6 +15,7 @@ const Navbar = () => {
     searchQuery,
     getCartCount,
     axios,
+    clearCart,
   } = useAppContext();
   const logout = async () => {
     try {
@@ -22,6 +23,7 @@ const Navbar = () => {
       if (data.success) {
         toast.success(data.message);
         setUser(null);
+        clearCart(); // clear previos cart
         navigate("/");
       } else {
         toast.error(data.message);
