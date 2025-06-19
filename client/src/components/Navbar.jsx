@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
+  const menuRef = React.useRef();
   const {
     user,
     setUser,
@@ -32,7 +33,24 @@ const Navbar = () => {
       toast.error(error.message);
     }
   };
+  // outside click handle mobile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
 
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
   useEffect(() => {
     if (searchQuery.length > 0) {
       navigate("/products");
@@ -141,6 +159,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {open && (
         <div
+          ref={menuRef}
           className={`${
             open ? "flex" : "hidden"
           }  absolute top-[60px] z-50 left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
